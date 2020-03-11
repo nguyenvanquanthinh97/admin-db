@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import PageWrapper from './components/PageWrapper';
-import HomePage from './components/Pages/Home';
+import PageWrapper from './components/PageWrapper/index';
+
+const HomePage = React.lazy(() => import('./Pages/Home'));
 
 class App extends Component {
   constructor(props) {
@@ -10,9 +12,15 @@ class App extends Component {
 
   render() {
     return (
-      <PageWrapper>
-        <HomePage />
-      </PageWrapper>
+      <Router>
+        <PageWrapper>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Switch>
+              <Route path='/' exact component={HomePage} />
+            </Switch>
+          </Suspense>
+        </PageWrapper>
+      </Router>
     );
   }
 }
